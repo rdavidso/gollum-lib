@@ -28,7 +28,7 @@ class Gollum::Filter::WSD < Gollum::Filter
   # data - The String data (with placeholders).
   #
   # Returns the marked up String data.
-  def process(data)
+  def process(data, dir=nil)
     @map.each do |id, spec|
       data.gsub!(id) do
         render_wsd(spec[:code], spec[:style])

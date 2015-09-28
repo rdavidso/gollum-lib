@@ -5,7 +5,7 @@ class Gollum::Filter::Sanitize < Gollum::Filter
     data
   end
 
-  def process(data)
+  def process(data, dir=nil)
     if @markup.sanitize
       doc = Nokogiri::HTML::DocumentFragment.parse(data)
       doc = @markup.sanitize.clean_node!(doc)

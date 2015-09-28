@@ -10,7 +10,7 @@ class Gollum::Filter::PlainText < Gollum::Filter
     @markup.format == :txt ? "<pre>#{CGI.escapeHTML(data)}</pre>" : data
   end
 
-  def process(data)
+  def process(data, dir=nil)
     data
   end
 end

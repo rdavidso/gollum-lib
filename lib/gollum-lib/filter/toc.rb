@@ -4,7 +4,7 @@ class Gollum::Filter::TOC < Gollum::Filter
     data
   end
 
-  def process(data)
+  def process(data, dir=nil)
 
     @doc               = Nokogiri::HTML::DocumentFragment.parse(data)
     @toc               = nil

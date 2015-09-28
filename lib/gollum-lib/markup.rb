@@ -122,7 +122,7 @@ module Gollum
 
       # Then we process the data through the chain *backwards*
       filter_chain.reverse.each do |filter|
-        data = filter.process(data)
+        data = filter.process(data, @dir)
       end
 
       # Finally, a little bit of cleanup, just because

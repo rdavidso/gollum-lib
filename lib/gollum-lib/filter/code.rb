@@ -51,7 +51,7 @@ class Gollum::Filter::Code < Gollum::Filter
   # encoding - Encoding Constant or String.
   #
   # Returns the marked up String data.
-  def process(data)
+  def process(data, dir=nil)
     return data if data.nil? || data.size.zero? || @map.size.zero?
 
     blocks = []

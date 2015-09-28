@@ -78,7 +78,7 @@ class Gollum::Filter::PlantUML < Gollum::Filter
 
   # Process all diagrams from the map and replace the placeholders with
   # the final HTML.
-  def process(data)
+  def process(data, dir=nil)
     @map.each do |id, spec|
       data.gsub!(id) do
         render_plantuml(id, spec[:code])

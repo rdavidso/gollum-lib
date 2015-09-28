@@ -23,7 +23,7 @@ class Gollum::Filter::Metadata < Gollum::Filter
     end
   end
 
-  def process(data)
+  def process(data, dir=nil)
     data
   end
 end

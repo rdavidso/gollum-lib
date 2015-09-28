@@ -38,7 +38,7 @@ class Gollum::Filter::Macro < Gollum::Filter
     end
   end
 
-  def process(data)
+  def process(data, dir=nil)
     @map.each do |id, spec|
       macro = spec[:macro]
       args  = spec[:args]

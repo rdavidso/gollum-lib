@@ -60,7 +60,7 @@ module Gollum
             "#{self.class} has not implemented ##extract!"
     end
 
-    def process(_d)
+    def process(_d, dir=nil)
       raise RuntimeError,
             "#{self.class} has not implemented ##process!"
     end

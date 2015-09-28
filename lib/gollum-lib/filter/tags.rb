@@ -36,7 +36,7 @@ class Gollum::Filter::Tags < Gollum::Filter
 
   # Process all text nodes from the doc and replace the placeholders with the
   # final markup.
-  def process(rendered_data)
+  def process(rendered_data, dir=nil)
     doc  = Nokogiri::HTML::DocumentFragment.parse(rendered_data)
     doc.traverse do |node|
       if node.text? then
@@ -46,7 +46,7 @@ class Gollum::Filter::Tags < Gollum::Filter
             if is_preformatted?(node) then
               "[[#{tag}]]"
             else
-              process_tag(tag).gsub('%2f', '/')
+              process_tag(tag, dir).gsub('%2f', '/')
             end
           end
         end
@@ -72,7 +72,7 @@ class Gollum::Filter::Tags < Gollum::Filter
   #             brackets).
   #
   # Returns the String HTML version of the tag.
-  def process_tag(tag)
+  def process_tag(tag, dir)
     if tag =~ /^_TOC_$/
       %{[[#{tag}]]}
     elsif tag =~ /^_$/
@@ -86,7 +86,7 @@ class Gollum::Filter::Tags < Gollum::Filter
     elsif (html = process_file_link_tag(tag))
       html
     else
-      process_page_link_tag(tag)
+      process_page_link_tag(tag, dir)
     end
   end
 
@@ -268,7 +268,7 @@ class Gollum::Filter::Tags < Gollum::Filter
   #
   # Returns the String HTML if the tag is a valid page link tag or nil
   #   if it is not.
-  def process_page_link_tag(tag)
+  def process_page_link_tag(tag, dir)
     parts = tag.split('|')
     parts.reverse! if @markup.reverse_links?
 
@@ -277,7 +277,7 @@ class Gollum::Filter::Tags < Gollum::Filter
 
     presence    = "absent"
     link_name   = cname
-    page, extra = find_page_from_name(cname)
+    page, extra = find_page_from_name(cname, dir)
     if page
       link_name = @markup.wiki.page_class.cname(page.name)
       presence  = "present"
@@ -300,7 +300,7 @@ class Gollum::Filter::Tags < Gollum::Filter
   # Returns a Gollum::Page instance if a page is found, or an Array of
   # [Gollum::Page, String extra] if a page without the extra anchor data
   # is found.
-  def find_page_from_name(cname)
+  def find_page_from_name(cname, dir=nil)
     slash = cname.rindex('/')
 
     unless slash.nil?
@@ -308,7 +308,11 @@ class Gollum::Filter::Tags < Gollum::Filter
       path = cname[0..slash]
       page = @markup.wiki.paged(name, path)
     else
-      page = @markup.wiki.paged(cname, '/') || @markup.wiki.page(cname)
+      unless dir.nil?
+        page = @markup.wiki.paged(cname, '/' + dir) || @markup.wiki.paged(cname, '/') || @markup.wiki.page(cname)
+      else
+        page = @markup.wiki.paged(cname, '/') || @markup.wiki.page(cname)
+      end
     end
 
     if page
